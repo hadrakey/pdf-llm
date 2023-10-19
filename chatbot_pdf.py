@@ -16,11 +16,11 @@ from langchain.memory import ConversationBufferMemory
 
 import pickle
 import os
-#load api key lib
+
 from dotenv import load_dotenv
 import base64
 
-# os.environ["HUGGINGFACEHUB_API_TOKEN"] = "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"
+#load api key lib
 os.environ["OPENAI_API_KEY"] = "....."
 
 #Background images add function
