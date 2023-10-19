@@ -21,7 +21,7 @@ from dotenv import load_dotenv
 import base64
 
 # os.environ["HUGGINGFACEHUB_API_TOKEN"] = "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"
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = "....."
 
 #Background images add function
 def add_bg_from_local(image_file):
