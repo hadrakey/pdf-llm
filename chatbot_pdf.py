@@ -21,7 +21,7 @@ from dotenv import load_dotenv
 import base64
 
 #load api key lib
-os.environ["OPENAI_API_KEY"] = "....."
+os.environ["OPENAI_API_KEY"] = "...."
 
 #Background images add function
 def add_bg_from_local(image_file):
@@ -68,7 +68,7 @@ load_dotenv()
 def main():
     st.header("📄Chat with your pdf file🤗")
 
-    #upload a your pdf file
+    #upload your pdf file
     pdf = st.file_uploader("Upload your PDF", type='pdf')
     # st.write(pdf)
 
@@ -80,6 +80,9 @@ def main():
             text+= page.extract_text()
 
         #langchain_textspliter
+        #Once we have the document content, the next step is to convert that into fixed-sized
+    #  chunks so that the text fits into our choice-of-models context window.
+    #  We’ll use RecursiveCharacterTextSplitter with a chunk size of 1000
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size = 1000,
             chunk_overlap = 150,
@@ -103,6 +106,8 @@ def main():
             # embeddings = HuggingFaceEmbeddings(model_name='dangvantuan/sentence-camembert-large')
 
             #Store the chunks part in db (vector)
+            # Once we have broken the document down into chunks, next step is to create embeddings for 
+            # the text and store it in vector store. We can do it as shown below.
             vectorstore = FAISS.from_texts(chunks,embedding=embeddings)
 
             with open(f"{store_name}.pkl","wb") as f:
@@ -119,7 +124,8 @@ def main():
 
         if query:
             memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
-            chain = ConversationalRetrievalChain.from_llm(ChatOpenAI(model_name="gpt-4", temperature=0.3),  retriever=vectorstore.as_retriever(), memory=memory)
+            # Here we define the type of model in the argument model_name. ef model_name = "gpt-4"
+            chain = ConversationalRetrievalChain.from_llm(ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.3),  retriever=vectorstore.as_retriever(), memory=memory)
             history = []
             
             # result = chain({"question": query, 'chat_history': history}, return_only_outputs=True)
